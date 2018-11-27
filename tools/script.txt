@@ -1,0 +1,23 @@
+ #!/bin/sh
+ usage()
+ {
+     echo -e "usage: Two parameters are needed, first: diff file, second: destination dir to store all your changed files\n"
+     exit 1
+ }
+ 
+ if [ $# != 2 ]; then
+     usage
+ fi
+ 
+ egrep '^Index' $1 | sed 's/Index: //' > script.txt
+ cat script.txt | while read line
+ do
+     echo "Processing: $line"
+     dirpath=$(dirname $line)
+     fpath="$2/$dirpath"
+     if [ ! -d $fpath ]; then
+         mkdir -p $fpath
+     fi
+     cp $line $fpath
+ done
+ rm -rf script.txt
