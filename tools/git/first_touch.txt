@@ -11,3 +11,7 @@ git push -u origin master
 
 git remote add origin git@github.com:andyxmu/linux_2_6_5.git
 git push -u origin master
+
+resources：
+Linux 下建立 Git 与 GitHub 的连接
+https://www.cnblogs.com/woider/p/6533709.html
