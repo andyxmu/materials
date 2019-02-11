@@ -1,0 +1,32 @@
+ixgb_probe()
+	/*注册ixgb_open()函数*/
+	netdev->open = &ixgb_open
+		ixgb_up()
+			/*请求irq，注册中断处理ISR，ixgb_intr()*/
+			request_irq()
+				| jump to：	
+				|
+			ixgb_intr()
+				ixgb_clean_rx_irq()
+					dev_alloc_skb()
+					eth_type_trans()
+					netif_rx()
+						netif_rx_schedule()
+							__netif_rx_schedule()
+								/*置位softirq位*/
+								__raise_softirq_irqoff(NET_RX_SOFTIRQ)
+								
+								
+init()
+	do_pre_smp_initcalls()
+		spawn_ksoftirqd()
+			cpu_callback()
+				/*if action == CPU_UP_PREPARE*/
+				kthread_create(ksoftirqd, hcpu, "ksoftirqd/%d", hotcpu)
+				/*if action == CPU_ONLINE, 唤醒软中断线程*/
+				wake_up_process(per_cpu(ksoftirqd, hotcpu))
+					| jump to 软中断线程执行
+					|
+				ksoftirqd()
+					do_softirq()
+						call_softirq()
